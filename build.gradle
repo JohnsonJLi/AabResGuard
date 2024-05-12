@@ -3,8 +3,20 @@
 buildscript {
     apply from: rootProject.file("gradle/config.gradle")
     repositories {
+
+        maven { url 'https://maven.aliyun.com/nexus/content/repositories/google' }
+        maven { url 'https://maven.aliyun.com/nexus/content/groups/public' }
+        maven { url 'https://maven.aliyun.com/nexus/content/repositories/jcenter' }
+        maven { url 'https://maven.aliyun.com/repository/gradle-plugin' }
+
+        maven {
+            url 'https://maven.google.com' // Google的Maven仓库
+        }
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
         google()
-        jcenter()
+        mavenCentral()
         if ("true".equalsIgnoreCase(System.getProperty('useLocalMaven', "false"))) {
             println "use local repo"
             mavenLocal()
@@ -12,9 +24,6 @@ buildscript {
             println "use remove repo"
             maven { url findProperty("RELEASE_REPOSITORY_URL") }
             maven { url findProperty("SNAPSHOT_REPOSITORY_URL") }
-        }
-        maven {
-            url "https://plugins.gradle.org/m2/"
         }
     }
     dependencies {
@@ -25,21 +34,31 @@ buildscript {
         classpath deps.kotlin.plugin
 
         if ("true".equalsIgnoreCase(System.getProperty("enableAabResGuardPlugin", "false"))) {
-            classpath deps.aabresguard.plugin
+//            classpath deps.aabresguard.plugin
         }
     }
 }
 
 allprojects {
     repositories {
-        google()
-        jcenter()
+
+        maven { url 'https://maven.aliyun.com/nexus/content/repositories/google' }
+        maven { url 'https://maven.aliyun.com/nexus/content/groups/public' }
+        maven { url 'https://maven.aliyun.com/nexus/content/repositories/jcenter' }
+        maven { url 'https://maven.aliyun.com/repository/gradle-plugin' }
+
+//        jcenter()
+        maven {
+            url 'https://maven.google.com' // Google的Maven仓库
+        }
         if ("true".equalsIgnoreCase(System.getProperty('useLocalMaven', "false"))) {
             mavenLocal()
         } else {
             maven { url findProperty("RELEASE_REPOSITORY_URL") }
             maven { url findProperty("SNAPSHOT_REPOSITORY_URL") }
         }
+        google()
+        mavenCentral()
     }
 }
 

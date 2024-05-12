@@ -24,7 +24,7 @@ println "username: $publishUserName"
 println "password: $publishPassword"
 
 publishing {
-    if (!System.getProperty("uploadToBintray", "false").equalsIgnoreCase("true")) {
+//    if (!System.getProperty("uploadToBintray", "false").equalsIgnoreCase("true")) {
         repositories {
             maven {
                 url = publishUrl
@@ -39,7 +39,7 @@ publishing {
                 }
             }
         }
-    }
+//    }
 
     if (project.plugins.hasPlugin("java-library") || project.plugins.hasPlugin("java")) {
         publications {
@@ -58,4 +58,4 @@ publishing {
     }
 }
 
-apply from: "$rootDir/gradle/publish-bintray.gradle"
+//apply from: "$rootDir/gradle/publish-bintray.gradle"

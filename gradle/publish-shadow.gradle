@@ -25,25 +25,25 @@ println "password: $publishPassword"
 
 apply plugin: 'maven-publish'
 
-def pomConfig = {
-    licenses {
-        license {
-            name "The Apache Software License, Version 2.0"
-            url "http://www.apache.org/licenses/LICENSE-2.0.txt"
-            distribution "repo"
-        }
-    }
-    developers {
-        developer {
-            id bintrayInfo.developer.id
-            name bintrayInfo.developer.name
-            email bintrayInfo.developer.email
-        }
-    }
-    scm {
-        url bintrayInfo.repo.siteUrl
-    }
-}
+//def pomConfig = {
+//    licenses {
+//        license {
+//            name "The Apache Software License, Version 2.0"
+//            url "http://www.apache.org/licenses/LICENSE-2.0.txt"
+//            distribution "repo"
+//        }
+//    }
+//    developers {
+//        developer {
+//            id bintrayInfo.developer.id
+//            name bintrayInfo.developer.name
+//            email bintrayInfo.developer.email
+//        }
+//    }
+//    scm {
+//        url bintrayInfo.repo.siteUrl
+//    }
+//}
 
 publishing {
     publications {
@@ -56,17 +56,18 @@ publishing {
             artifact sourcesJar
             artifact javadocJar
 
-            pom.withXml {
-                def root = asNode()
-                root.appendNode('description', bintrayInfo.repo.description)
-                root.appendNode('name', bintrayInfo.repo.name)
-                root.appendNode('url', bintrayInfo.repo.siteUrl)
-                root.children().last() + pomConfig
-            }
+//            pom.withXml {
+//                def root = asNode()
+//                root.appendNode('description', bintrayInfo.repo.description)
+//                root.appendNode('name', bintrayInfo.repo.name)
+//                root.appendNode('url', bintrayInfo.repo.siteUrl)
+//                root.children().last() + pomConfig
+//            }
         }
     }
 
-    if (!System.getProperty("uploadToBintray", "false").equalsIgnoreCase("true")) {
+//    if (!System.getProperty("uploadToBintray", "false").equalsIgnoreCase("true")) {
+        println "uploadToBintray: ${System.getProperty("uploadToBintray", "false")}"
         repositories {
             maven {
                 url = publishUrl
@@ -76,7 +77,7 @@ publishing {
                 }
             }
         }
-    }
+//    }
 }
 
-apply from: "$rootDir/gradle/publish-bintray.gradle"
+//apply from: "$rootDir/gradle/publish-bintray.gradle"
