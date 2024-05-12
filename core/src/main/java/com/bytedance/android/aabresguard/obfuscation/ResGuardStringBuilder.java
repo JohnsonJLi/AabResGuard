@@ -32,7 +32,7 @@ public class ResGuardStringBuilder {
             "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"
     };
 
-    public static String[] getRandomizedArray(String[] sourceArray) {
+    public static String[] getRandomizedAndTrimmedArray(String[] sourceArray) {
         if (sourceArray.length < 20) {
             throw new IllegalArgumentException("Source array must contain at least 20 elements.");
         }
@@ -40,20 +40,21 @@ public class ResGuardStringBuilder {
         String[] arrayCopy = Arrays.copyOf(sourceArray, sourceArray.length);
         Collections.shuffle(Arrays.asList(arrayCopy), new Random());
 
-        if (arrayCopy.length < 20) {
-            List<String> tempList = new ArrayList<>(Arrays.asList(arrayCopy));
-            while (tempList.size() < 20) {
-                tempList.addAll(Arrays.asList(arrayCopy)); // Recycle elements until we have enough
-            }
-            Collections.shuffle(tempList, new Random());
-            arrayCopy = tempList.subList(0, 20).toArray(new String[0]);
+        // Decide how many elements to delete, ensuring we don't go below 20
+        int elementsToDelete = new Random().nextInt(Math.max(0, arrayCopy.length - 20));
+
+        // Perform deletion while maintaining the constraint
+        List<String> tempList = new ArrayList<>(Arrays.asList(arrayCopy));
+        while (tempList.size() > 20 && !tempList.isEmpty()) {
+            tempList.remove(new Random().nextInt(tempList.size()));
         }
-        System.out.println("Random mAToZ: " + Arrays.toString(arrayCopy));
-        return arrayCopy;
+
+        return tempList.subList(0, Math.min(tempList.size(), 20)).toArray(new String[0]);
     }
 
-    private static String[] mAToZ = getRandomizedArray(oldAToZ);
-    private static String[] mAToAll = getRandomizedArray(oldAToAll);
+    private static String[] mAToZ = getRandomizedAndTrimmedArray(oldAToZ);
+    private static String[] mAToAll = getRandomizedAndTrimmedArray(oldAToAll);
+
     /**
      * 在window上面有些关键字是不能作为文件名的
      * CON, PRN, AUX, CLOCK$, NUL
