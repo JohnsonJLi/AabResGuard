@@ -1,27 +1,32 @@
 package com.bytedance.android.plugin.tasks
 
 import com.android.build.gradle.api.ApplicationVariant
-import com.android.build.gradle.internal.scope.VariantScope
 import com.bytedance.android.aabresguard.commands.ObfuscateBundleCommand
 import com.bytedance.android.plugin.extensions.AabResGuardExtension
 import com.bytedance.android.plugin.internal.getBundleFilePath
 import com.bytedance.android.plugin.internal.getSigningConfig
 import com.bytedance.android.plugin.model.SigningConfig
 import org.gradle.api.DefaultTask
+import org.gradle.api.tasks.Internal
 import org.gradle.api.tasks.TaskAction
 import java.io.File
 import java.nio.file.Path
+import javax.inject.Inject
 
 /**
  * Created by YangJing on 2019/10/15 .
  * Email: yangjing.yeoh@bytedance.com
  */
-open class AabResGuardTask : DefaultTask() {
+open class AabResGuardTask @Inject constructor() : DefaultTask() {
 
     private lateinit var variant: ApplicationVariant
+    @Internal
     lateinit var signingConfig: SigningConfig
+    @Internal
     var aabResGuard: AabResGuardExtension = project.extensions.getByName("aabResGuard") as AabResGuardExtension
+
     private lateinit var bundlePath: Path
+    @Internal
     private lateinit var obfuscatedBundlePath: Path
 
     init {

@@ -49,7 +49,9 @@ public class ResGuardStringBuilder {
             tempList.remove(new Random().nextInt(tempList.size()));
         }
 
-        return tempList.subList(0, Math.min(tempList.size(), 20)).toArray(new String[0]);
+        String[] array = tempList.subList(0, Math.min(tempList.size(), 20)).toArray(new String[0]);
+        System.out.println("Random arg : " + Arrays.toString(array));
+        return array;
     }
 
     private static String[] mAToZ = getRandomizedAndTrimmedArray(oldAToZ);
