@@ -3,9 +3,12 @@ package com.bytedance.android.aabresguard.obfuscation;
 import com.bytedance.android.aabresguard.utils.Utils;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Random;
 import java.util.Set;
 import java.util.regex.Pattern;
 
@@ -19,14 +22,38 @@ public class ResGuardStringBuilder {
     private final List<String> mReplaceStringBuffer;
     private final Set<Integer> mIsReplaced;
     private final Set<Integer> mIsWhiteList;
-    private String[] mAToZ = {
+
+    private static String[] oldAToZ = {
             "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v",
             "w", "x", "y", "z"
     };
-    private String[] mAToAll = {
+    private static String[] oldAToAll = {
             "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "_", "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k",
             "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z"
     };
+
+    public static String[] getRandomizedArray(String[] sourceArray) {
+        if (sourceArray.length < 20) {
+            throw new IllegalArgumentException("Source array must contain at least 20 elements.");
+        }
+
+        String[] arrayCopy = Arrays.copyOf(sourceArray, sourceArray.length);
+        Collections.shuffle(Arrays.asList(arrayCopy), new Random());
+
+        if (arrayCopy.length < 20) {
+            List<String> tempList = new ArrayList<>(Arrays.asList(arrayCopy));
+            while (tempList.size() < 20) {
+                tempList.addAll(Arrays.asList(arrayCopy)); // Recycle elements until we have enough
+            }
+            Collections.shuffle(tempList, new Random());
+            arrayCopy = tempList.subList(0, 20).toArray(new String[0]);
+        }
+        System.out.println("Random mAToZ: " + Arrays.toString(arrayCopy));
+        return arrayCopy;
+    }
+
+    private static String[] mAToZ = getRandomizedArray(oldAToZ);
+    private static String[] mAToAll = getRandomizedArray(oldAToAll);
     /**
      * 在window上面有些关键字是不能作为文件名的
      * CON, PRN, AUX, CLOCK$, NUL
